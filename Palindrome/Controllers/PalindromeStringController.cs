@@ -1,4 +1,6 @@
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Mvc;
 using Palindrome.Models;
 
@@ -20,21 +22,9 @@ public class PalindromeStringController : ControllerBase
         
         pm.OriginalString = rg.Replace(userInput, string.Empty).ToLower();
         pm.ReversedString = rg.Replace(ReverseString(userInput), string.Empty).ToLower();
-
-        if (pm.OriginalString == pm.ReversedString)
-        {
-            pm.IsPalindrome = true;
-            pm.Message = Yup;
-        }
-        else
-        {
-            pm.IsPalindrome = false;
-            pm.Message = Nope;
-        }
-        
-        return pm;
+        return pm.OriginalString == pm.ReversedString ? Mmhmmm(pm) : NaUhh(pm);
     }
-
+    
     private static string ReverseString(string userInput)
     {
         var reversedString = "";
@@ -43,5 +33,19 @@ public class PalindromeStringController : ControllerBase
             reversedString += userInput[i];
         }
         return reversedString;
+    }
+
+    private MPalindrome Mmhmmm(MPalindrome pm)
+    {
+        pm.IsPalindrome = true;
+        pm.Message = Yup;
+        return pm;
+    }
+    
+    private MPalindrome NaUhh(MPalindrome pm)
+    {
+        pm.IsPalindrome = false;
+        pm.Message = Nope;
+        return pm;
     }
 }
